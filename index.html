@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Subtracao do tecido da parafina</title>
+    </head>
+    <body>
+        <h1>Gerar grafico da subtracao</h1>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label for="parafina">Arquivo com os dados da parafina:</label>
+            <input type="file" id="parafina" name="parafina" required><br><br>
+
+            <label for="tecido">Arquivo com os dados do tecido:</label>
+            <input type="file" id="tecido" name="tecido" required><br><br>
+
+            <label for="title"> Titulo do grafico</label>
+            <input type="text" id="title" name="title" required><br><br>
+
+            <button type="submit">Gerar grafico</button>
+        </form>
+
+        <h2>Grafico dos resultados da separacao</h2>
+        <img id="graphResult" src="" alt="Grafico resultante" style="display: none; width: 80%;">
+
+        <script>
+            document.getElementById('uploadForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                // Cria formdata para enviar arquivos dos dados
+                const formData = new FormData();
+                formData.append('parafina', document.getElementById('parafina').files[0]);
+                formData.append('tecido', document.getElementById('tecido').files[0]);
+                formData.append('title', document.getElementById('title').value);
+
+                // Envia os dados pra API
+                fetch('http://127.0.0.1:5000/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.blob()) // recebe a imagem como resposta
+                .then(imageBlob => {
+                    // exibe o grafico na pagina
+                    const imgURL = URL.createObjectURL(imageBlob);
+                    const imgElement = document.getElementById('graphResult');
+                    imgElement.src = imgURL;
+                    imgElement.style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Erro', error);
+                });
+            });
+        </script>
+    </body>
+</html>
