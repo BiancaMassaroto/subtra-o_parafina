@@ -4,4 +4,4 @@ wheel
 Flask==2.3.2
 pandas==2.0.3
 matplotlib==3.8.0
-flask-cors==3.1.1
+flask-cors==3.0.10
